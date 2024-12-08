@@ -14,8 +14,17 @@ const nextConfig: NextConfig = {
         hostname: "a57.foxnews.com",
         port: "**",
       },
+      {
+        protocol: "https",
+        hostname: "lh3.googleusercontent.com",
+        port: "**",
+      },
     ],
-    domains: ["image.cnbcfm.com", "a57.foxnews.com"],
+    domains: [
+      "image.cnbcfm.com",
+      "a57.foxnews.com",
+      "lh3.googleusercontent.com",
+    ],
   },
 };
 
