@@ -65,6 +65,7 @@ const Input = () => {
           setImageFileUploading(false);
           setImageFileUrl(null);
           setSelectedFile(null);
+          location.reload(); // reload the page to show realtime changes after the user posts
         },
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
@@ -78,7 +79,7 @@ const Input = () => {
 
   const handleSubmit = async () => {
     setPostLoading(true);
-    const docRef = await addDoc(collection(db, "posts"), {
+    await addDoc(collection(db, "posts"), {
       uid: session?.user.uid,
       name: session?.user.name,
       username: session?.user.username,
