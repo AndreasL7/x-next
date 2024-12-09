@@ -20,11 +20,14 @@ import {
   DocumentData,
   QueryDocumentSnapshot,
 } from "firebase/firestore";
+import { modalState } from "@/atom/modalAtom";
+import { useRecoilState } from "recoil";
 
 const Icons = ({ id, uid }: { id: string; uid: string }) => {
   const { data: session } = useSession();
   const [isLiked, setIsLiked] = useState(false);
   const [likes, setLikes] = useState<QueryDocumentSnapshot<DocumentData>[]>([]);
+  const [open, setOpen] = useRecoilState(modalState);
   const db = getFirestore(app);
 
   useEffect(() => {
@@ -81,7 +84,10 @@ const Icons = ({ id, uid }: { id: string; uid: string }) => {
 
   return (
     <div className="flex justify-start gap-5 p-2 text-gray-500">
-      <HiOutlineChat className="h-8 w-8 cursor-pointer rounded-full transition duration-500 ease-in-out p-2 hover:text-sky-500 hover:bg-sky-100" />
+      <HiOutlineChat
+        className="h-8 w-8 cursor-pointer rounded-full transition duration-500 ease-in-out p-2 hover:text-sky-500 hover:bg-sky-100"
+        onClick={() => setOpen(!open)}
+      />
 
       <div className="flex items-center">
         {isLiked ? (
