@@ -50,7 +50,12 @@ const Comments = ({ id }: CommentProps) => {
   return (
     <div>
       {comments.map((comment) => (
-        <Comment key={comment.timestamp.toString()} comment={comment} id={id} />
+        <Comment
+          key={comment.timestamp.toString()}
+          comment={comment}
+          commentId={id}
+          originalPostId={id}
+        />
       ))}
       ;
     </div>
