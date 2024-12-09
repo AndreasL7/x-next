@@ -4,6 +4,7 @@ import { getFirestore, getDoc, doc } from "firebase/firestore";
 import { HiArrowLeft } from "react-icons/hi";
 import Link from "next/link";
 import Post from "@/components/Post";
+import Comments from "@/components/Comments";
 
 interface PostPageProps {
   params: {
@@ -32,6 +33,7 @@ const PostPage = async ({ params }: PostPageProps) => {
         <h2 className="sm:text-lg">Back</h2>
       </div>
       <Post post={data} id={data.id} />
+      <Comments id={params.id} />
     </div>
   );
 };
