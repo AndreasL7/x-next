@@ -3,6 +3,7 @@ import Image from "next/image";
 import { HiDotsHorizontal } from "react-icons/hi";
 import Link from "next/link";
 import { Timestamp } from "firebase/firestore";
+import Icons from "./Icons";
 
 interface Post {
   id: string;
@@ -22,7 +23,7 @@ interface PostProps {
 
 const Post = ({ post, id }: PostProps) => {
   return (
-    <div className="flex p-3 border-b border-gray-200">
+    <div className="flex p-3 border-b border-gray-200 hover:bg-gray-50">
       <Image
         src={post?.profileImg || "/avatar.png"} // Fallback to "/avatar.png" if profileImg is missing
         width={44}
@@ -51,6 +52,7 @@ const Post = ({ post, id }: PostProps) => {
             className="rounded-2xl mr-2"
           />
         </Link>
+        <Icons />
       </div>
     </div>
   );
