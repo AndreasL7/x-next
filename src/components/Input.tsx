@@ -11,6 +11,12 @@ import {
   getDownloadURL,
 } from "firebase/storage";
 import { app } from "../firebase";
+import {
+  addDoc,
+  collection,
+  getFirestore,
+  serverTimestamp,
+} from "firebase/firestore";
 
 const Input = () => {
   const { data: session } = useSession();
@@ -18,6 +24,10 @@ const Input = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [imageFileUploading, setImageFileUploading] = useState(false);
   const imagePickRef = useRef<HTMLInputElement>(null);
+  const [text, setText] = useState("");
+  const [postLoading, setPostLoading] = useState(false);
+
+  const db = getFirestore(app);
 
   const addImageToPost = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -66,6 +76,23 @@ const Input = () => {
     }
   };
 
+  const handleSubmit = async () => {
+    setPostLoading(true);
+    const docRef = await addDoc(collection(db, "posts"), {
+      uid: session?.user.uid,
+      name: session?.user.name,
+      username: session?.user.username,
+      text,
+      profileImg: session?.user.image,
+      timestamp: serverTimestamp(),
+      image: imageFileUrl,
+    });
+    setPostLoading(false);
+    setText("");
+    setImageFileUrl(null);
+    setSelectedFile(null);
+  };
+
   if (!session) return null;
 
   return (
@@ -79,6 +106,8 @@ const Input = () => {
       />
       <div className="w-full divide-y divide-gray-200">
         <textarea
+          value={text}
+          onChange={(e) => setText(e.target.value)}
           className="w-full border-none outline-none tracking-wide min-h-[50px] text-gray-700"
           placeholder="Whats happening?"
           rows={2}
@@ -89,7 +118,8 @@ const Input = () => {
             alt="image"
             width={600}
             height={250}
-            className="w-full max-h-[250px] object-cover cursor-pointer"
+            className={`w-full max-h-[250px] object-cover cursor-pointer
+                ${imageFileUploading ? "animate-pulse" : ""}`}
           />
         )}
         <div className="flex items-center justify-between pt-2.5">
@@ -109,8 +139,9 @@ const Input = () => {
             hidden
           />
           <button
-            disabled
+            disabled={(text.trim() === "" || postLoading, imageFileUploading)}
             className="bg-blue-400 text-white px-4 py-1.5 rounded-full font-bold shadow-md hover:brightness-95 disabled:opacity-50"
+            onClick={handleSubmit}
           >
             Post
           </button>
